@@ -1,7 +1,7 @@
 '''
 *************************************************
 Universidad del Valle de Guatemala
-Diseño de Lenguajes de Programación
+Bases de datos 2
 
 input_reader.py
 - Lectura de comandos

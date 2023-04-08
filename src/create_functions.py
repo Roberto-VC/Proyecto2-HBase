@@ -1,7 +1,7 @@
 '''
 *************************************************
 Universidad del Valle de Guatemala
-Diseño de Lenguajes de Programación
+Bases de datos 2
 
 create_functions.py
 - Funciones de creacion de data
