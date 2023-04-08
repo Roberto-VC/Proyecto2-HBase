@@ -29,7 +29,7 @@
 
 ## 🗃️ Estructura de Archivos
 
-- **`src`**: COdigo fuente del proyecto
+- **`src`**: Código fuente del proyecto
 
 - **`data`**: Archivos json (json Arrays) que contienen la data de cada una de las tablas.
 
@@ -39,7 +39,7 @@
 
 1. Ejecute el archivo `main.py`
 2. Se crearan varias carpetas `__pycache__` con compilados del codigo.
-3. Se abrira una CLI donde se podra interactuar don el *HDFS*.
+3. Se abrira una CLI donde podrá interactuar con el *HDFS*.
 
 ## 🤓 Autores
 
