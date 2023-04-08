@@ -18,7 +18,7 @@
   - [ ] Drop All
   - [ ] Describe
 
-- Lenguaje de definición de datos:
+- Lenguaje de Manipulación de datos:
   - [ ] Put (como función para insertar y actualizar. Si actualiza el timestamp deberá ser actualizado).
   - [ ] Get
   - [ ] Scan

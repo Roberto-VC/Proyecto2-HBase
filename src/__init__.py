@@ -1,1 +1,1 @@
-from .create_functions import *
+from .input_reader import process_input
