@@ -16,7 +16,7 @@ from .util import read_json
 
 
 def exec_create_command(command: list) -> str:
-    data = read_json('./data/example.json')
+    data = read_json('./data/table_status.json')
     prefix = command[0]
     # TODO implementar commandos de creacion de data
 

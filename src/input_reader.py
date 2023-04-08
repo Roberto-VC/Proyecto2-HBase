@@ -26,33 +26,28 @@ CREATE_COMMANDS = [
 ]
 
 ALTER_COMMANDS = [
-    'Put',
-    'Get',
-    'Scan',
-    'Delete',
-    'Deleteall',
-    'Count',
-    'Truncate'
+    'put',
+    'get',
+    'scan',
+    'delete',
+    'deleteall',
+    'count',
+    'truncate'
 ]
-
-
-def _read_input(input: str) -> list:
-    ''' Devuelve una lista del comando y parametros del comando '''
-    return input.split(' ')
 
 
 def process_input(input: str) -> str:
     if input == 'exit':
         return ''
 
-    splited = _read_input(input)
+    splited = input.split(' ')
     command = splited[0]
 
     if command in CREATE_COMMANDS:
-        return exec_create_command(command)
+        return exec_create_command(splited)
 
     if command in ALTER_COMMANDS:
         # TODO Implementar comandos de manipulacion de datos
-        return command
+        return splited
 
-    return f'ERROR: comand "{command}" not valid'
+    return f'ERROR: comand "{splited}" not valid'
