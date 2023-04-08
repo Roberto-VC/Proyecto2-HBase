@@ -37,11 +37,11 @@
 
 ## 🕹️ Getting Started
 
-- Ejecute el archivo `main.py`
-
-1. Se crearan varias carpetas `__pycache__` con compilados del codigo.
+1. Ejecute el archivo `main.py`
+2. Se crearan varias carpetas `__pycache__` con compilados del codigo.
+3. Se abrira una CLI donde se podra interactuar don el *HDFS*.
 
 ## 🤓 Autores
 
-Diego Cordova - 20212
-Roberto Vallecillos - 20441
+- Diego Cordova - 20212
+- Roberto Vallecillos - 20441
