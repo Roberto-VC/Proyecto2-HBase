@@ -32,6 +32,9 @@
 - **`src`**: Código fuente del proyecto
 
 - **`data`**: Archivos json (json Arrays) que contienen la data de cada una de las tablas.
+  
+  - `example.json`: Maqueta ejemplo de data
+  - `table_status.json`: Información de status de tablas (*enabled* | *disabled*).
 
 - `main.py`: Programa principal (Driver Program).
 

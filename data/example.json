@@ -1,9 +1,61 @@
 [
-  {
-    "id": "1",
-    "rowkey": "1",
-    "column": "ejemplo",
-    "timestamp": "",
-    "value": ""
-  }
+    {
+        "rowkey-1": // Ejemplo de row con nombre 
+        {
+            "column-fam-1": 
+            {
+                // Cada uno de los valores dentro de los column qualifiers
+                // Representan Timestamps
+                "column-qualy-1":
+                [
+                    "value1"
+                ],
+                "column-qualy-2":
+                [
+                    "value1",
+                    "value2"
+                ]
+            },
+            "column-fam-2": 
+            {
+                "column-qualy-1":
+                [
+                    "value1"
+                ],
+                "column-qualy-2":
+                [
+                    "value1",
+                    "value2"
+                ]
+            }
+        },
+        "1": // Ejemplo de row con data ejemplo
+        {
+            "Personal": 
+            {
+                // Cada uno de los valores dentro de los column qualifiers
+                // Representan Timestamps
+                "Name":
+                [
+                    "John"
+                ],
+                "Residence Phone":
+                [
+                    "502-1234-5678",
+                    "502-1234-1234"
+                ]
+            },
+            "Office": 
+            {
+                "Phone":
+                [
+                    "value1"
+                ],
+                "Adress":
+                [
+                    "Vista hermosa 3, zona 15, Guatemala"
+                ]
+            }
+        }
+    }
 ]
