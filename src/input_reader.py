@@ -13,6 +13,7 @@ Autores:
 '''
 
 from .create_functions import exec_create_command
+from .manipulacion import manipulacion
 
 CREATE_COMMANDS = [
     'create',
@@ -47,7 +48,6 @@ def process_input(input: str) -> str:
         return exec_create_command(splited)
 
     if command in ALTER_COMMANDS:
-        # TODO Implementar comandos de manipulacion de datos
-        return splited
+        return manipulacion(splited)
 
     return f'ERROR: comand "{splited}" not valid'

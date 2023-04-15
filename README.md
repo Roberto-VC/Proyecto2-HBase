@@ -19,11 +19,11 @@
   - [ ] Describe
 
 - Lenguaje de Manipulación de datos:
-  - [ ] Put (como función para insertar y actualizar. Si actualiza el timestamp deberá ser actualizado).
-  - [ ] Get
-  - [ ] Scan
-  - [ ] Delete
-  - [ ] Deleteall
+  - [x] Put (como función para insertar y actualizar. Si actualiza el timestamp deberá ser actualizado).
+  - [x] Get
+  - [x] Scan
+  - [x] Delete
+  - [x] Deleteall
   - [ ] Count
   - [ ] Truncate (deberá replicar el disable, drop y recreate de la tabla) 
 
