@@ -9,128 +9,168 @@ def manipulacion(split):
     for x in split:
         new += x
         new += " "
-        if temp == "put":
-            new = new.replace(",", "").split()
-            a_file = open(new[0].replace("'", "") + ".json")
-            json_object = json.load(a_file)
-            a_file.close()
-            row = False
-            x = None
-            for p in json_object:
-                if new[1] in p:
-                    row = True
-                    x = p
-            if row:
-                JSON = x[new[1]]
-                column = new[2].split(":")
-                if column[0].replace("'", "") in JSON:
-                    a = JSON[column[0].replace("'", "")]
-                    a[column[1].replace("'", "")] = [
-                        new[3].replace("'", ""),
-                        time.time(),
-                    ]
-                    x = JSON
-                else:
-                    a = {}
-                    a[column[1].replace("'", "")] = [
-                        new[3].replace("'", ""),
-                        time.time(),
-                    ]
-                    JSON[column[0].replace("'", "")] = a
-                    x = JSON
-                    print(x)
+    new = new[:-1]
+    if temp == "put":
+        new = new.split(", ")
+        a_file = open(new[0].replace("'", "")+".json")
+        json_object = json.load(a_file)
+        a_file.close()
+        row = False
+        x = None
+        for p in json_object:
+            if new[1] in p:
+                row = True
+                x = p
+        if row:
+            
+            JSON = x[new[1]]
+            
+            column = new[2].split(":")
 
+            if column[0].replace("'", "") in json_object[0]:
+
+                if column[0].replace("'", "") not in JSON:
+                    JSON[column[0].replace("'", "")] = {}
+                a = JSON[column[0].replace("'", "")]
+                print(a)
+                if column[1].replace("'", "") not in a:
+                    a[column[1].replace("'", "")] = []
+                temp = a[column[1].replace("'", "")]
+                
+                temp.append({"value": new[3].replace("'", ""), "timestamp": time.time()})
+                if len(temp) == 4:
+                    temp.pop(0)
+                x = JSON
             else:
-                JSON = {}
-                column = new[2].split(":")
-                JSON[column[0].replace("'", "")] = {
-                    column[1].replace("'", ""): [new[3], time.time()]
-                }
+                print("Columna no Existe")
+
+        else: 
+            JSON = {}
+            column = new[2].split(":")
+            if column[0].replace("'", "") in json_object[0]:
+                JSON[column[0].replace("'", "")] = {column[1].replace("'", ""): [{"value": new[3].replace("'", ""), "timestamp": time.time()}]}
                 BIG = {new[1].replace("'", ""): JSON}
                 json_object.append(BIG)
-            a_file = open(new[0].replace("'", "") + ".json", "w")
-            json.dump(json_object, a_file)
-            a_file.close()
-            print(json_object)
-        elif temp == "get":
-            new = new.replace("'", "").replace(",", "").split()
-            a_file = open(new[0] + ".json")
-            json_object = json.load(a_file)
-            a_file.close()
-            print(json_object)
-            print("COLUMN            CELL")
-            for x in json_object:
-                if new[1] in x:
-                    JSON = x[new[1]]
-                    for y in JSON:
-                        newjson = JSON[y]
-                        for z in JSON[y]:
-                            print(z + ":" + y, "value=" + newjson[z][0])
-        elif temp == "scan":
-            print("ROW            COLUMN+CELL")
-            new = new.replace("'", "").replace(",", "").split()
-            a_file = open(new[0] + ".json")
-            json_object = json.load(a_file)
-            a_file.close()
-            for x in json_object:
-                for y in x:
-                    rows = x[y]
-                    for z in rows:
-                        columns = rows[z]
-                        for w in columns:
-                            values = columns[w]
-                            print(
-                                y
-                                + "              column="
-                                + z
-                                + ":"
-                                + w
-                                + ", "
-                                + "timestamp="
-                                + values[-1]
-                                + ", "
-                                + "value="
-                                + values[0]
-                            )
+            else:
+                print("Columna no existe")
+        a_file = open(new[0].replace("'", "")+".json", "w")
+        json.dump(json_object, a_file)
+        a_file.close()
+    elif temp == "get":
+        new = new.replace("'", "").split(", ")
+        a_file = open(new[0]+".json")
+        json_object = json.load(a_file)
+        a_file.close()
+        columnas = None
+        version = None
+        if len(new) >= 3:
+            if len(new) == 3:
+                if "{" not in new[2] or "}" not in new[2] or "=>" not in new[2]:
+                    return "Error de Sintaxis"
+            elif len(new) == 4:
+                if "{" not in new[2] or "}" not in new[3] or "=>" not in new[2] or "=>" not in new[3]:
+                    return "Error de Sintaxis"
+                p = new[3].split("=>")
+                version = int(p[1].replace("}", "").replace(" ", ""))
+            columnas = new[2].split("=>")
+            
+            print(columnas)
+            columnas[0] = columnas[0].replace("{", "").replace(" ", "")
+            columnas[1] = columnas[1].replace("}", "")
+            columnas[1] = columnas[1][1:]
+            print(columnas[1])
+ 
+        print("COLUMN               CELL")
+        for x in json_object:
+            if new[1] in x:
+                JSON = x[new[1]]
+                for y in JSON:
+                    newjson =JSON[y]
+                    for z in JSON[y]:
+                        if version:
+                            jsons = newjson[z]
+                            if columnas != None:     
+                                data = columnas[1].split(":")
+                                if y == data[0] and z == data[1]:
+                                    for m in jsons:
+                                        print(str(z)+":"+str(y), "       timestamp=" + str(m["timestamp"]) + "  value="+str(m["value"]))
+                            else:
+                                for m in jsons:
+                                    print(str(z)+":"+str(y), "         timestamp=" + str(m["timestamp"]) + "  value="+str(m["value"]))
+                        else:
+                            jsons = newjson[z][0]
+                            if columnas != None:     
+                                data = columnas[1].split(":")
+                                if y == data[0] and z == data[1]:
+                                    print(str(z)+":"+str(y), "       timestamp=" + str(jsons["timestamp"]) + "  value="+str(jsons["value"]))
+                            else:
+                                print(str(z)+":"+str(y), "         timestamp=" + str(jsons["timestamp"]) + "  value="+str(jsons["value"]))
+    elif temp == "scan":
+        print("ROW            COLUMN+CELL")
+        new = new.replace("'", "").split(", ")
+        a_file = open(new[0]+".json")
+        json_object = json.load(a_file)
+        a_file.close()
+        json_object.pop(0)
+        for x in json_object:
+            for y in x:
+                rows = x[y]
+                for z in rows:
+                    columns = rows[z]
+                    for w in columns:
+                        values = columns[w]
+                        values = values[0]
+                        print(str(y)+ "              column="+str(z)+":"+str(w)+ ", "+ "timestamp="+str(values["timestamp"])+", " + "value="+str(values["value"]))
 
-        elif temp == "delete":
-            new = new.replace("'", "").replace(",", "").split()
-            a_file = open(new[0] + ".json")
-            json_object = json.load(a_file)
-            a_file.close()
-            for x in json_object:
-                if new[1] in x:
-                    JSON = x[new[1]]
-                    column = new[2].split(":")
-                    a = JSON[column[0].replace("'", "")]
+
+    elif temp == "delete":
+        new = new.replace("'", "").split(", ")
+        a_file = open(new[0]+".json")
+        json_object = json.load(a_file)
+        a_file.close()
+        for x in json_object:
+            if new[1] in x:
+                JSON = x[new[1]]
+                column = new[2].split(":")
+                a = JSON[column[0].replace("'", "")]
+                if len(new) == 4:
+                    te = []
+                    for x in a[column[1].replace("'", "")]:
+                        if x['timestamp'] == float(new[3].replace("'", "")):
+                            continue
+                        else:
+                            te.append(x)
+                    a[column[1].replace("'", "")] = te
+                else:
                     del a[column[1].replace("'", "")]
-                    x = JSON
-            print(json_object)
-            a_file = open(new[0].replace("'", "") + ".json", "w")
-            json.dump(json_object, a_file)
-            a_file.close()
-        elif temp == "deleteAll":
-            new = new.replace("'", "").replace(",", "").split()
-            a_file = open(new[0] + ".json")
-            json_object = json.load(a_file)
-            a_file.close()
-            for x in json_object:
-                if new[1] in x:
-                    json_object.remove(x)
-            print(json_object)
-            a_file = open(new[0].replace("'", "") + ".json", "w")
-            json.dump(json_object, a_file)
-            a_file.close()
-        elif temp == "count":
-            a_file = open(new[0].replace("'", "") + ".json")
-            json_object = json.load(a_file)
-            a_file.close()
-            print(len(json_object))
-        elif temp == "truncate":
-            a_file = open(new[0].replace("'", "") + ".json")
-            json_object = json.load(a_file)
-            a_file.close()
-            json_object = []
-            a_file = open(new[0] + ".json", "w")
-            json.dump(json_object, a_file)
-            a_file.close()
+                x = JSON
+        print(json_object)
+        a_file = open(new[0].replace("'", "")+".json", "w")
+        json.dump(json_object, a_file)
+        a_file.close()
+    elif temp == "deleteAll":
+        new = new.replace("'", "").replace(",", "").split()
+        a_file = open(new[0]+".json")
+        json_object = json.load(a_file)
+        a_file.close()
+        for x in json_object:
+            if new[1] in x:
+                json_object.remove(x)
+        print(json_object)
+        a_file = open(new[0].replace("'", "")+".json", "w")
+        json.dump(json_object, a_file)
+        a_file.close()
+    elif temp == "count":
+        a_file = open(new.replace("'", "")+".json")
+        json_object = json.load(a_file)
+        a_file.close()
+        json_object.pop(0)
+        print(len(json_object))
+    elif temp == "truncate":
+        print(new)
+        a_file = open(new.replace("'", "")+".json")
+        json_object = json.load(a_file)
+        a_file.close()
+        a_file = open(new.replace("'","")+".json", "w")
+        json.dump([json_object[0]], a_file)
+        a_file.close()
