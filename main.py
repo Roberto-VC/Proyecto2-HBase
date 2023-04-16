@@ -7,7 +7,6 @@ if __name__ == '__main__':
     command = ''
     while command != 'exit':
         command = input('\nHDFS> ')
-        command = command.lower()
         output = process_input(command)
         print(output)
 

@@ -25,7 +25,7 @@
   - [x] Scan
   - [x] Delete
   - [x] Deleteall
-  - [ ] Count
+  - [x] Count
   - [ ] Truncate (deberá replicar el disable, drop y recreate de la tabla) 
 
 ## 🗃️ Estructura de Archivos

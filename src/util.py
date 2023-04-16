@@ -52,5 +52,28 @@ def write_json(filename: str, data: dict) -> str:
     return filename
 
 
+def is_enabled(tablename: list) -> bool:
+    # Check value
+    status = read_json('./data/table_status.json')
+    if tablename not in status.keys():
+        return None
+    return status[tablename] == 'enabled'
+
+
 def getDataFile():
     return os.listdir('./data/')
+
+
+def disable(table_name) -> str:
+    '''Disables a table in HBase'''
+    # Get Table status data
+    status = read_json('./data/table_status.json')
+
+    # Check value
+    if table_name in status.keys():
+        if status[table_name] == 'disabled':
+            return f'  Table "{table_name}" already disabled'
+
+    status[table_name] = 'disabled'
+    write_json('table_status', status)
+    return f'  Table "{table_name}" disabled'

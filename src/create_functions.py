@@ -44,9 +44,8 @@ def _create(command: list) -> str:
         column_families.append(column)
 
     # Build new table
-    new_table = [{
-        'description': {column: {} for column in column_families}
-    }]
+    new_table = [[column for column in column_families]]
+    print(new_table)
 
     # Enable table
     _enable(filename=table_name)
@@ -74,7 +73,7 @@ def _list() -> str:
     return tables
 
 
-def _disable(command: list) -> str:
+def disable(command: list) -> str:
     '''Disables a table in HBase'''
     # Check if table exists
     table_name = command[1]
@@ -180,6 +179,7 @@ def _describe(command: list) -> str:
 
 def exec_create_command(command: list) -> str:
     prefix = command[0]
+    # TODO command = command.lower()
     # TODO implementar commandos de creacion de data
     # TODO Comentar Funciones
 

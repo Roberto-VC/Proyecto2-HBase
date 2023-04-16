@@ -32,7 +32,7 @@ ALTER_COMMANDS = [
     'get',
     'scan',
     'delete',
-    'deleteall',
+    'deleteAll',
     'count',
     'truncate'
 ]

@@ -1,0 +1,13 @@
+[
+    [
+        "nombre",
+        "telefono",
+        "apellido"
+    ],
+    {
+        "description": {
+            "fam1": {},
+            "fam2": {}
+        }
+    }
+]

@@ -1,1 +1,18 @@
-[["Personal", "Office"], {"1": {"Personal": {"Name": [{"value": "Marcos", "timestamp": 1681603007.1351745}], "Residence Phone": [{"value": "555-3333", "timestamp": 1681614930.6661782}]}, "Office": {"Phone": [{"value": "555-2222", "timestamp": 1681603235.6019685}]}}}]
+[
+  ["Personal", "Office"],
+  {
+    "1": {
+      "Personal": {
+        "Name": [
+          {"value": "Marcos", "timestamp": 1681603007.1351745}
+        ], 
+        "Residence Phone": [
+          {"value": "555-3333", "timestamp": 1681614930.6661782}
+        ]
+      }, 
+      "Office": {
+        "Phone": [{"value": "555-2222", "timestamp": 1681603235.6019685}]
+      }
+    }
+  }
+]
