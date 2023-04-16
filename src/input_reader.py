@@ -19,6 +19,7 @@ CREATE_COMMANDS = [
     'create',
     'list',
     'disable',
+    'enable',
     'is_enabled',
     'alter',
     'drop',
@@ -50,4 +51,4 @@ def process_input(input: str) -> str:
     if command in ALTER_COMMANDS:
         return manipulacion(splited)
 
-    return f'ERROR: comand "{splited}" not valid'
+    return f'ERROR: comand "{input}" not valid'

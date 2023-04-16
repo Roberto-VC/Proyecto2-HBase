@@ -9,13 +9,14 @@
 
 ### Funciones
 - Lenguaje de definición de datos:
-  - [ ] Create
-  - [ ] List 
-  - [ ] Disable
-  - [ ] Is_enabled
+  - [x] Create
+  - [x] List 
+  - [x] Disable
+  - [x] Enable
+  - [x] Is_enabled
   - [ ] Alter
-  - [ ] Drop
-  - [ ] Drop All
+  - [x] Drop
+  - [x] Drop All
   - [ ] Describe
 
 - Lenguaje de Manipulación de datos:

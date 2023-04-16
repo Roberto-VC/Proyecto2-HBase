@@ -1,6 +1,8 @@
 import time
 import json
 import os
+from .util import write_json
+
 
 def manipulacion(split):
     temp = split.pop(0)
@@ -12,7 +14,7 @@ def manipulacion(split):
     new = new[:-1]
     if temp == "put":
         new = new.split(", ")
-        a_file = open(new[0].replace("'", "")+".json")
+        a_file = open('./data/'+new[0].replace("'", "")+".json")
         json_object = json.load(a_file)
         a_file.close()
         row = False
@@ -22,9 +24,9 @@ def manipulacion(split):
                 row = True
                 x = p
         if row:
-            
+
             JSON = x[new[1]]
-            
+
             column = new[2].split(":")
 
             if column[0].replace("'", "") in json_object[0]:
@@ -36,29 +38,30 @@ def manipulacion(split):
                 if column[1].replace("'", "") not in a:
                     a[column[1].replace("'", "")] = []
                 temp = a[column[1].replace("'", "")]
-                
-                temp.append({"value": new[3].replace("'", ""), "timestamp": time.time()})
+
+                temp.append({"value": new[3].replace(
+                    "'", ""), "timestamp": time.time()})
                 if len(temp) == 4:
                     temp.pop(0)
                 x = JSON
             else:
                 print("Columna no Existe")
 
-        else: 
+        else:
             JSON = {}
             column = new[2].split(":")
             if column[0].replace("'", "") in json_object[0]:
-                JSON[column[0].replace("'", "")] = {column[1].replace("'", ""): [{"value": new[3].replace("'", ""), "timestamp": time.time()}]}
+                JSON[column[0].replace("'", "")] = {column[1].replace("'", ""): [
+                    {"value": new[3].replace("'", ""), "timestamp": time.time()}]}
                 BIG = {new[1].replace("'", ""): JSON}
                 json_object.append(BIG)
             else:
                 print("Columna no existe")
-        a_file = open(new[0].replace("'", "")+".json", "w")
-        json.dump(json_object, a_file)
-        a_file.close()
+        filename = new[0].replace("'", "")
+        write_json(filename, json_object)
     elif temp == "get":
         new = new.replace("'", "").split(", ")
-        a_file = open(new[0]+".json")
+        a_file = open('./data/'+new[0]+".json")
         json_object = json.load(a_file)
         a_file.close()
         columnas = None
@@ -73,42 +76,46 @@ def manipulacion(split):
                 p = new[3].split("=>")
                 version = int(p[1].replace("}", "").replace(" ", ""))
             columnas = new[2].split("=>")
-            
+
             print(columnas)
             columnas[0] = columnas[0].replace("{", "").replace(" ", "")
             columnas[1] = columnas[1].replace("}", "")
             columnas[1] = columnas[1][1:]
             print(columnas[1])
- 
+
         print("COLUMN               CELL")
         for x in json_object:
             if new[1] in x:
                 JSON = x[new[1]]
                 for y in JSON:
-                    newjson =JSON[y]
+                    newjson = JSON[y]
                     for z in JSON[y]:
                         if version:
                             jsons = newjson[z]
-                            if columnas != None:     
+                            if columnas != None:
                                 data = columnas[1].split(":")
                                 if y == data[0] and z == data[1]:
                                     for m in jsons:
-                                        print(str(z)+":"+str(y), "       timestamp=" + str(m["timestamp"]) + "  value="+str(m["value"]))
+                                        print(str(z)+":"+str(y), "       timestamp=" +
+                                              str(m["timestamp"]) + "  value="+str(m["value"]))
                             else:
                                 for m in jsons:
-                                    print(str(z)+":"+str(y), "         timestamp=" + str(m["timestamp"]) + "  value="+str(m["value"]))
+                                    print(str(z)+":"+str(y), "         timestamp=" +
+                                          str(m["timestamp"]) + "  value="+str(m["value"]))
                         else:
                             jsons = newjson[z][0]
-                            if columnas != None:     
+                            if columnas != None:
                                 data = columnas[1].split(":")
                                 if y == data[0] and z == data[1]:
-                                    print(str(z)+":"+str(y), "       timestamp=" + str(jsons["timestamp"]) + "  value="+str(jsons["value"]))
+                                    print(str(z)+":"+str(y), "       timestamp=" +
+                                          str(jsons["timestamp"]) + "  value="+str(jsons["value"]))
                             else:
-                                print(str(z)+":"+str(y), "         timestamp=" + str(jsons["timestamp"]) + "  value="+str(jsons["value"]))
+                                print(str(z)+":"+str(y), "         timestamp=" +
+                                      str(jsons["timestamp"]) + "  value="+str(jsons["value"]))
     elif temp == "scan":
         print("ROW            COLUMN+CELL")
         new = new.replace("'", "").split(", ")
-        a_file = open(new[0]+".json")
+        a_file = open('./data/'+new[0]+".json")
         json_object = json.load(a_file)
         a_file.close()
         json_object.pop(0)
@@ -120,12 +127,12 @@ def manipulacion(split):
                     for w in columns:
                         values = columns[w]
                         values = values[0]
-                        print(str(y)+ "              column="+str(z)+":"+str(w)+ ", "+ "timestamp="+str(values["timestamp"])+", " + "value="+str(values["value"]))
-
+                        print(str(y) + "              column="+str(z)+":"+str(w) + ", " +
+                              "timestamp="+str(values["timestamp"])+", " + "value="+str(values["value"]))
 
     elif temp == "delete":
         new = new.replace("'", "").split(", ")
-        a_file = open(new[0]+".json")
+        a_file = open('./data/'+new[0]+".json")
         json_object = json.load(a_file)
         a_file.close()
         for x in json_object:
@@ -145,32 +152,32 @@ def manipulacion(split):
                     del a[column[1].replace("'", "")]
                 x = JSON
         print(json_object)
-        a_file = open(new[0].replace("'", "")+".json", "w")
+        a_file = open('./data/'+new[0].replace("'", "")+".json", "w")
         json.dump(json_object, a_file)
         a_file.close()
     elif temp == "deleteAll":
         new = new.replace("'", "").replace(",", "").split()
-        a_file = open(new[0]+".json")
+        a_file = open('./data/'+new[0]+".json")
         json_object = json.load(a_file)
         a_file.close()
         for x in json_object:
             if new[1] in x:
                 json_object.remove(x)
         print(json_object)
-        a_file = open(new[0].replace("'", "")+".json", "w")
+        a_file = open('./data/'+new[0].replace("'", "")+".json", "w")
         json.dump(json_object, a_file)
         a_file.close()
     elif temp == "count":
-        a_file = open(new.replace("'", "")+".json")
+        a_file = open('./data/'+new.replace("'", "")+".json")
         json_object = json.load(a_file)
         a_file.close()
         json_object.pop(0)
         print(len(json_object))
     elif temp == "truncate":
         print(new)
-        a_file = open(new.replace("'", "")+".json")
+        a_file = open('./data/'+new.replace("'", "")+".json")
         json_object = json.load(a_file)
         a_file.close()
-        a_file = open(new.replace("'","")+".json", "w")
+        a_file = open('./data/'+new.replace("'", "")+".json", "w")
         json.dump([json_object[0]], a_file)
         a_file.close()

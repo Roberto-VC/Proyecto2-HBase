@@ -13,6 +13,7 @@ Autores:
 '''
 
 import json
+import os
 
 
 def read_json(path: str) -> dict | list:
@@ -31,3 +32,25 @@ def read_json(path: str) -> dict | list:
     f.close()
 
     return data
+
+
+def write_json(filename: str, data: dict) -> str:
+    ''' 
+    Escribe un diccionario como json a un archivo
+    ``path``: Path del archivo json a leer
+    '''
+    # filename adjustements
+    filename = './data/' + filename + '.json'
+
+    # Serializing json
+    json_object = json.dumps(data, indent=4)
+
+    # Writing to sample.json
+    with open(filename, 'w') as outfile:
+        outfile.write(json_object)
+
+    return filename
+
+
+def getDataFile():
+    return os.listdir('./data/')
