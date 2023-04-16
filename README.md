@@ -8,7 +8,7 @@
 ## ✅ Rúbrica
 
 ### Funciones
-- Lenguaje de definición de datos:
+- Funciones DDL:
   - [x] Create
   - [x] List 
   - [x] Disable
@@ -17,9 +17,9 @@
   - [x] Alter
   - [x] Drop
   - [x] Drop All
-  - [ ] Describe
+  - [x] Describe
 
-- Lenguaje de Manipulación de datos:
+- Funciones DML:
   - [x] Put (como función para insertar y actualizar. Si actualiza el timestamp deberá ser actualizado).
   - [x] Get
   - [x] Scan

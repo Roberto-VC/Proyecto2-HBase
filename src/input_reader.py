@@ -12,10 +12,10 @@ Autores:
 *************************************************
 '''
 
-from .create_functions import exec_create_command
+from .DDL import exec_DDL
 from .manipulacion import manipulacion
 
-CREATE_COMMANDS = [
+DDL_COMMANDS = [
     'create',
     'list',
     'disable',
@@ -27,7 +27,7 @@ CREATE_COMMANDS = [
     'describe'
 ]
 
-ALTER_COMMANDS = [
+DML_COMMANDS = [
     'put',
     'get',
     'scan',
@@ -45,10 +45,10 @@ def process_input(input: str) -> str:
     splited = input.split(' ')
     command = splited[0]
 
-    if command in CREATE_COMMANDS:
-        return exec_create_command(splited)
+    if command in DDL_COMMANDS:
+        return exec_DDL(splited)
 
-    if command in ALTER_COMMANDS:
+    if command in DML_COMMANDS:
         return manipulacion(splited)
 
     return f'ERROR: comand "{input}" not valid'

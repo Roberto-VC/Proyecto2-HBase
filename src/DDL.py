@@ -243,17 +243,48 @@ def _updateColumnFam(table_name: str, last: str, new: str) -> str:
 
 
 def _describe(command: list) -> str:
-    # TODO Implement describe command
-    pass
+    # Get table name
+    table_name = command[1]
+    table_name = table_name.replace(',', '')
+    table_name = table_name.replace("'", '')
+
+    # Get Enabled info
+    if not _tableExists(table_name):
+        return f'  Table "{table_name}" does not exists'
+
+    output = ''
+    output += _is_enabled([None, table_name]) + '\n'
+
+    # Get Columns info
+    data = read_json('./data/' + table_name + '.json')
+    columns_info = {fam: [] for fam in data[0]}
+
+    for row in data[1:]:
+        k = list(row.keys())[0]
+        actual_row = row[k]
+        # families = list(actual_row.keys())
+
+        for fam in actual_row.keys():
+            family_bucket = columns_info[fam]
+
+            for qualifier in list(actual_row[fam].keys()):
+                if qualifier not in family_bucket:
+                    family_bucket.append(qualifier)
+
+    for k in columns_info.keys():
+        output += '\n' + k + f': columns {len(columns_info[k])}\n'
+        for qualyfier in columns_info[k]:
+            output += '  -> ' + qualifier + '\n'
+
+    return output
 
 
 # ---- Command Switch ----
 
-def exec_create_command(command: list) -> str:
+def exec_DDL(command: list) -> str:
+    '''Runs a DDL command in HBase'''
+    command = [word.lower() for word in command]
     prefix = command[0]
-    # TODO command = command.lower()
-    # TODO implementar commandos de creacion de data
-    # TODO Comentar Funciones
 
     match prefix:
         case 'create':
