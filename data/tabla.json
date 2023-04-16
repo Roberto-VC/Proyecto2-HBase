@@ -1,13 +1,50 @@
 [
-    [
-        "nombre",
-        "telefono",
-        "apellido"
-    ],
+    ["nombre", "telefono", "apellido"],
     {
         "description": {
-            "fam1": {},
-            "fam2": {}
+            "fam1": {
+                "nombre": [
+                    {
+                    "value": "diego",
+                    "timestamp": 12334567
+                    }
+                ],
+                "apellido": [
+                    {
+                        "value": "cordova",
+                        "timestamp": 3
+                    }
+                ]
+            },
+            "fam2": {
+
+            }
+        }
+    },
+    {
+        "1": {
+            "fam1": {
+                "nombre": [
+                    {
+                    "value": "diego",
+                    "timestamp": 12334567
+                    }
+                ],
+                "apellido": [
+                    {
+                        "value": "cordova",
+                        "timestamp": 3
+                    }
+                ]
+            },
+            "fam2": {
+                "telefono": [
+                    {
+                        "value": "123123",
+                        "timestamp": 5
+                    }
+                ]
+            }
         }
     }
 ]

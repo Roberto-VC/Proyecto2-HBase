@@ -73,7 +73,7 @@ def _list() -> str:
     return tables
 
 
-def disable(command: list) -> str:
+def _disable(command: list) -> str:
     '''Disables a table in HBase'''
     # Check if table exists
     table_name = command[1]
@@ -131,11 +131,6 @@ def _is_enabled(command: list) -> str:
     return output
 
 
-def _alter(command: list) -> str:
-    # TODO Implement alter command
-    pass
-
-
 def _drop(command: list = None, filename: str = None) -> str:
     # Get table name
     table_name = command[1] if filename is None else filename
@@ -168,6 +163,86 @@ def _drop_all() -> str:
         output += _drop(filename=file)
 
     return output
+
+
+def _getColumnFams(table_name: str) -> list:
+    table = read_json('./data/' + table_name + '.json')
+    return table[0]
+
+
+def _alter(command: list) -> str:
+    # TODO Implement alter command
+    # hbase> alter '<tableName>', ‘colFam’ ⇒ ‘newName’
+
+    # Get table name
+    table_name = command[1]
+    table_name = table_name.replace(',', '')
+    table_name = table_name.replace("'", '')
+
+    if not _tableExists(table_name):
+        return f'  Table "{table_name}" does not exists'
+
+    # Get table name
+    alter_info = ''.join(command[2:]).replace("'", '').split('=>')
+    alter_type = alter_info[0]
+    alter_column = alter_info[1]
+
+    if alter_type in _getColumnFams(table_name):
+        return _updateColumnFam(table_name, alter_type, alter_column)
+
+    if alter_type == 'delete':
+        return _deleteColumnFam(table_name, alter_column)
+
+    return f'  Error: option "{alter_type}" invalid for alter'
+
+
+def _deleteColumnFam(table_name: str, colum: str) -> str:
+    data = read_json('./data/' + table_name + '.json')
+    column_fams = data[0]
+    if colum not in column_fams:
+        return f'  Table "{table_name}" does not contain column family "{colum}"'
+
+    # Delete column from description
+    column_fams.remove(colum)
+
+    # Delete from data
+
+    for row in data[1:]:
+        k = list(row.keys())[0]
+        actual_row = row[k]
+        fams = actual_row.keys()
+
+        if colum in fams:
+            actual_row.pop(colum)
+
+    write_json(table_name, data)
+    return f'  column family "{colum}" deleted from table "{table_name}"'
+
+
+def _updateColumnFam(table_name: str, last: str, new: str) -> str:
+    data = read_json('./data/' + table_name + '.json')
+    column_fams = data[0]
+    if last not in column_fams:
+        return f'  Table "{table_name}" does not contain column family "{last}"'
+
+    # Update column from description
+    column_fams.remove(last)
+    column_fams.append(new)
+
+    # Update from data
+
+    for row in data[1:]:
+        k = list(row.keys())[0]
+        actual_row = row[k]
+        fams = actual_row.keys()
+
+        if last in fams:
+            last_data = actual_row[last]
+            actual_row.pop(last)
+            actual_row[new] = last_data
+
+    write_json(table_name, data)
+    return f'  column family "{last}" replaced with "{new}" in table "{table_name}"'
 
 
 def _describe(command: list) -> str:

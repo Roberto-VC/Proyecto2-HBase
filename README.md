@@ -14,7 +14,7 @@
   - [x] Disable
   - [x] Enable
   - [x] Is_enabled
-  - [ ] Alter
+  - [x] Alter
   - [x] Drop
   - [x] Drop All
   - [ ] Describe
