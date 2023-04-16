@@ -171,9 +171,6 @@ def _getColumnFams(table_name: str) -> list:
 
 
 def _alter(command: list) -> str:
-    # TODO Implement alter command
-    # hbase> alter '<tableName>', ‘colFam’ ⇒ ‘newName’
-
     # Get table name
     table_name = command[1]
     table_name = table_name.replace(',', '')
