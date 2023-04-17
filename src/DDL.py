@@ -20,6 +20,7 @@ def _tableExists(table_name) -> bool:
     '''Returns True if table especified as params exists in HFILE and False if not'''
     actual_files = [file.replace('.json', '') for file in getDataFile()]
     actual_files.remove('example')
+    actual_files.remove('versions')
     actual_files.remove('table_status')
     return table_name in actual_files
 
@@ -45,10 +46,14 @@ def _create(command: list) -> str:
 
     # Build new table
     new_table = [[column for column in column_families]]
-    print(new_table)
 
     # Enable table
     _enable(filename=table_name)
+
+    # init versions
+    versions = read_json('./data/versions.json')
+    versions[table_name] = 3
+    write_json('versions', versions)
 
     # Write Json File
     write_json(table_name, new_table)
@@ -59,6 +64,7 @@ def _list() -> str:
     # Get Table List
     actual_files = [file.replace('.json', '') for file in getDataFile()]
     actual_files.remove('example')
+    actual_files.remove('versions')
     actual_files.remove('table_status')
 
     if len(actual_files) == 0:
@@ -154,6 +160,7 @@ def _drop_all() -> str:
     actual_files = [file.replace('.json', '') for file in getDataFile()]
     actual_files.remove('example')
     actual_files.remove('table_status')
+    actual_files.remove('versions')
 
     output = ''
     for file in actual_files:
@@ -189,6 +196,12 @@ def _alter(command: list) -> str:
 
     if alter_type == 'delete':
         return _deleteColumnFam(table_name, alter_column)
+
+    if alter_type == 'versions':
+        versions = read_json('./data/versions.json')
+        versions[table_name] = int(alter_column)
+        write_json('versions', versions)
+        return f'  Versions of table {table_name} changed to {alter_column}'
 
     return f'  Error: option "{alter_type}" invalid for alter'
 
@@ -254,6 +267,11 @@ def _describe(command: list) -> str:
 
     output = ''
     output += _is_enabled([None, table_name]) + '\n'
+
+    # Get Versions
+    versions = read_json('./data/versions.json')
+    versions = versions[table_name]
+    output += f'Versions => {versions}\n'
 
     # Get Columns info
     data = read_json('./data/' + table_name + '.json')
