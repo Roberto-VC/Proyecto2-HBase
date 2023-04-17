@@ -59,6 +59,13 @@ def is_enabled(tablename: list) -> bool:
         return None
     return status[tablename] == 'enabled'
 
+def versions(tablename) -> int:
+    # Check value
+    status = read_json('./data/versions.json')
+    if tablename not in status.keys():
+        return None
+    return status[tablename]
+
 
 def getDataFile():
     return os.listdir('./data/')

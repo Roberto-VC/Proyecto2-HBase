@@ -1,7 +1,7 @@
 import time
 import json
 import os
-from .util import write_json
+from .util import write_json, is_enabled, disable, versions
 
 
 def manipulacion(split):
@@ -14,6 +14,8 @@ def manipulacion(split):
     new = new[:-1]
     if temp == "put":
         new = new.split(", ")
+        if not is_enabled(new[0].replace("'", "")):
+            return "Tabla esta desactivada"
         a_file = open('./data/'+new[0].replace("'", "")+".json")
         json_object = json.load(a_file)
         a_file.close()
@@ -26,6 +28,7 @@ def manipulacion(split):
         if row:
 
             JSON = x[new[1]]
+            v = versions(new[0].replace("'", ""))
 
             column = new[2].split(":")
 
@@ -34,14 +37,13 @@ def manipulacion(split):
                 if column[0].replace("'", "") not in JSON:
                     JSON[column[0].replace("'", "")] = {}
                 a = JSON[column[0].replace("'", "")]
-                print(a)
                 if column[1].replace("'", "") not in a:
                     a[column[1].replace("'", "")] = []
                 temp = a[column[1].replace("'", "")]
 
                 temp.append({"value": new[3].replace(
                     "'", ""), "timestamp": time.time()})
-                if len(temp) == 4:
+                if len(temp) == v:
                     temp.pop(0)
                 x = JSON
             else:
@@ -61,6 +63,8 @@ def manipulacion(split):
         write_json(filename, json_object)
     elif temp == "get":
         new = new.replace("'", "").split(", ")
+        if not is_enabled(new[0].replace("'", "")):
+            return "Tabla esta desactivada"
         a_file = open('./data/'+new[0]+".json")
         json_object = json.load(a_file)
         a_file.close()
@@ -75,13 +79,16 @@ def manipulacion(split):
                     return "Error de Sintaxis"
                 p = new[3].split("=>")
                 version = int(p[1].replace("}", "").replace(" ", ""))
+                if p[0].replace("}", "").replace(" ", "") != "VERSIONS":
+                    return "Error de Sintaxis"
             columnas = new[2].split("=>")
 
-            print(columnas)
+            
             columnas[0] = columnas[0].replace("{", "").replace(" ", "")
             columnas[1] = columnas[1].replace("}", "")
             columnas[1] = columnas[1][1:]
-            print(columnas[1])
+            if columnas[0] != "COLUMN":
+                return "Error de sintaxis"
 
         print("COLUMN               CELL")
         for x in json_object:
@@ -113,11 +120,13 @@ def manipulacion(split):
                                 print(str(z)+":"+str(y), "         timestamp=" +
                                       str(jsons["timestamp"]) + "  value="+str(jsons["value"]))
     elif temp == "scan":
-        print("ROW            COLUMN+CELL")
         new = new.replace("'", "").split(", ")
+        if not is_enabled(new[0].replace("'", "")):
+            return "Tabla esta desactivada"
         a_file = open('./data/'+new[0]+".json")
         json_object = json.load(a_file)
         a_file.close()
+        print("ROW            COLUMN+CELL")
         json_object.pop(0)
         for x in json_object:
             for y in x:
@@ -132,6 +141,8 @@ def manipulacion(split):
 
     elif temp == "delete":
         new = new.replace("'", "").split(", ")
+        if not is_enabled(new[0].replace("'", "")):
+            return "Tabla esta desactivada"
         a_file = open('./data/'+new[0]+".json")
         json_object = json.load(a_file)
         a_file.close()
@@ -151,33 +162,37 @@ def manipulacion(split):
                 else:
                     del a[column[1].replace("'", "")]
                 x = JSON
-        print(json_object)
         a_file = open('./data/'+new[0].replace("'", "")+".json", "w")
         json.dump(json_object, a_file)
         a_file.close()
     elif temp == "deleteAll":
         new = new.replace("'", "").replace(",", "").split()
+        if not is_enabled(new[0].replace("'", "")):
+            return "Tabla esta desactivada"
         a_file = open('./data/'+new[0]+".json")
         json_object = json.load(a_file)
         a_file.close()
         for x in json_object:
             if new[1] in x:
                 json_object.remove(x)
-        print(json_object)
         a_file = open('./data/'+new[0].replace("'", "")+".json", "w")
         json.dump(json_object, a_file)
         a_file.close()
     elif temp == "count":
+        if not is_enabled(new.replace("'", "")):
+            return "Tabla esta desactivada"
         a_file = open('./data/'+new.replace("'", "")+".json")
         json_object = json.load(a_file)
         a_file.close()
         json_object.pop(0)
         print(len(json_object))
     elif temp == "truncate":
-        print(new)
         a_file = open('./data/'+new.replace("'", "")+".json")
         json_object = json.load(a_file)
         a_file.close()
+        disable(new.replace("'", ""))
+        print("Tabla desactivada")
+        print("Dropping tabla")
         a_file = open('./data/'+new.replace("'", "")+".json", "w")
         json.dump([json_object[0]], a_file)
         a_file.close()
