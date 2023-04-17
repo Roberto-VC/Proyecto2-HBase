@@ -60,7 +60,9 @@ def manipulacion(split):
             else:
                 print("Columna no existe")
         filename = new[0].replace("'", "")
-        write_json(filename, json_object)
+        a_file = open('./data/'+new[0].replace("'", "")+".json", "w")
+        json.dump(json_object, a_file, indent=4)
+        a_file.close()
     elif temp == "get":
         new = new.replace("'", "").split(", ")
         if not is_enabled(new[0].replace("'", "")):
@@ -83,7 +85,6 @@ def manipulacion(split):
                     return "Error de Sintaxis"
             columnas = new[2].split("=>")
 
-            
             columnas[0] = columnas[0].replace("{", "").replace(" ", "")
             columnas[1] = columnas[1].replace("}", "")
             columnas[1] = columnas[1][1:]
