@@ -43,7 +43,7 @@ def manipulacion(split):
 
                 temp.append({"value": new[3].replace(
                     "'", ""), "timestamp": time.time()})
-                if len(temp) == v:
+                if len(temp) > v:
                     temp.pop(0)
                 x = JSON
             else:
