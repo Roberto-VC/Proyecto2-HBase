@@ -153,6 +153,11 @@ def _drop(command: list = None, filename: str = None) -> str:
     status.pop(table_name)
     write_json('table_status', status)
 
+    # Remove from versions
+    status = read_json('./data/versions.json')
+    status.pop(table_name)
+    write_json('versions', status)
+
     return f'  Table "{table_name}" has been dropped'
 
 
