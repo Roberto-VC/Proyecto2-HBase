@@ -194,6 +194,7 @@ def manipulacion(split):
         disable(new.replace("'", ""))
         print("Disabling table")
         print("Truncating table")
+        enable(new.replace("'", ""))
         a_file = open('./data/'+new.replace("'", "")+".json", "w")
         json.dump([json_object[0]], a_file, indent=4)
         a_file.close()
