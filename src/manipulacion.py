@@ -1,7 +1,7 @@
 import time
 import json
 import os
-from .util import write_json, is_enabled, disable, versions
+from .util import write_json, is_enabled, disable, versions, enable
 
 
 def manipulacion(split):
@@ -192,8 +192,8 @@ def manipulacion(split):
         json_object = json.load(a_file)
         a_file.close()
         disable(new.replace("'", ""))
-        print("Tabla desactivada")
-        print("Dropping tabla")
+        print("Disabling table")
+        print("Truncating table")
         a_file = open('./data/'+new.replace("'", "")+".json", "w")
         json.dump([json_object[0]], a_file, indent=4)
         a_file.close()
