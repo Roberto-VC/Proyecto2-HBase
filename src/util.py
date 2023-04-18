@@ -84,3 +84,18 @@ def disable(table_name) -> str:
     status[table_name] = 'disabled'
     write_json('table_status', status)
     return f'  Table "{table_name}" disabled'
+
+def enable(table_name) -> str:
+    '''Enables a table in HBase'''
+    # Get Table status data
+    status = read_json('./data/table_status.json')
+
+    # Check value
+    if table_name in status.keys():
+        if status[table_name] == 'enabled':
+            return f'  Table "{table_name}" already enabled'
+
+    # Update value
+    status[table_name] = 'enabled'
+    write_json('table_status', status)
+    return f'  Table "{table_name}" enabled'

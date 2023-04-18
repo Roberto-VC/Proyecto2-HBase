@@ -1,7 +1,8 @@
 {
     "example": "disabled",
     "tabla": "enabled",
-    "nueva": "disabled",
+    "nueva": "enabled",
     "nueva2": "enabled",
-    "nuev3": "enabled"
+    "nuev3": "enabled",
+    "u": "enabled"
 }

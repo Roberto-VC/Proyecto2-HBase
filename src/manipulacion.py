@@ -1,7 +1,7 @@
 import time
 import json
 import os
-from .util import write_json, is_enabled, disable, versions
+from .util import write_json, is_enabled, disable, versions, enable
 
 
 def manipulacion(split):
@@ -43,7 +43,7 @@ def manipulacion(split):
 
                 temp.append({"value": new[3].replace(
                     "'", ""), "timestamp": time.time()})
-                if len(temp) > v:
+                while len(temp) > v:
                     temp.pop(0)
                 x = JSON
             else:
@@ -164,7 +164,7 @@ def manipulacion(split):
                     del a[column[1].replace("'", "")]
                 x = JSON
         a_file = open('./data/'+new[0].replace("'", "")+".json", "w")
-        json.dump(json_object, a_file)
+        json.dump(json_object, a_file, indent=4)
         a_file.close()
     elif temp == "deleteAll":
         new = new.replace("'", "").replace(",", "").split()
@@ -177,7 +177,7 @@ def manipulacion(split):
             if new[1] in x:
                 json_object.remove(x)
         a_file = open('./data/'+new[0].replace("'", "")+".json", "w")
-        json.dump(json_object, a_file)
+        json.dump(json_object, a_file, indent=4)
         a_file.close()
     elif temp == "count":
         if not is_enabled(new.replace("'", "")):
@@ -192,8 +192,9 @@ def manipulacion(split):
         json_object = json.load(a_file)
         a_file.close()
         disable(new.replace("'", ""))
-        print("Tabla desactivada")
-        print("Dropping tabla")
+        print("Disabling table")
+        print("Truncating table")
+        enable(new.replace("'", ""))
         a_file = open('./data/'+new.replace("'", "")+".json", "w")
-        json.dump([json_object[0]], a_file)
+        json.dump([json_object[0]], a_file, indent=4)
         a_file.close()
